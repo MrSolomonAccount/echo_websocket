@@ -23,13 +23,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
 appBar: AppBar(title: const Text("Echo Websocket"), centerTitle: true,),
 body: Form(child: Column(children: [
-TextFormField(decoration: const InputDecoration(labelText: "Say anthing"),
+TextFormField(decoration: const InputDecoration(labelText: "You say "),
 controller: controller,
 ),
 StreamBuilder(stream: widget.channel.stream, 
 
 builder: (_, snapshot){
-  return Text(snapshot.hasData?"The server said ${snapshot.data}":"no data received");
+  return Text(snapshot.hasData?"The server says ${snapshot.data}":"no data received");
 }),
 
 
@@ -39,6 +39,10 @@ floatingActionButton:FloatingActionButton(onPressed: (){
 if(controller.text.isNotEmpty){
   //sends data to the websocket server
   widget.channel.sink.add(controller.text);
+}
+else {
+  // reminds the user to write something in the textformfield
+  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("You must say something")));
 }
 }, child:const Icon(Icons.send),)
     );
